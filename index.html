@@ -626,12 +626,12 @@
   // مصفوفة بصري لصور العرض (ضع مسارات صورك هنا)
   const slideImages = [
     "https://cdn.discordapp.com/attachments/1200935158409334905/1383718048170508331/DD8403BA-1FEA-4575-BB5F-41A535C55381.jpg?ex=686ad61a&is=6869849a&hm=ffea5d1ce38fb6a35273b020d1880c9b68240ffaa3f008cc46f816c2ec89ab6c&",
-    "https://cdn.discordapp.com/attachments/1200935158409334905/1384656281922703410/IMG_2681.png?ex=686af427&is=6869a2a7&hm=f7a36ef35699075c52b379dd838a057d43f36faedfbc5dc1969cb7831fcae653&",
-    "https://cdn.discordapp.com/attachments/1200935158409334905/1384664695340011591/png.png?ex=686afbfd&is=6869aa7d&hm=5b992ec3b9d4d3b2781e3f51571e3311810fbfdb6381d9c499b69de66c573eb5&",
-    "https://cdn.discordapp.com/attachments/1200935158409334905/1384629387269374113/IMG_2640.png?ex=686adb1b&is=6869899b&hm=7c8498aae237402a2ab3d3f6dbd3b5ccd63cd12b0f102d7331f2cdc98a8fc1d1&", // الصورة الأولى
-      "https://cdn.discordapp.com/attachments/1200935158409334905/1383478403117875301/Instagram_.png.png?ex=686a9fab&is=68694e2b&hm=13277a6c86e8642845f0afd3c6641632865a32039c129a90bde31cfa91f15c06&", // الصورة الأولى
+    "https://i.postimg.cc/5yr1DWkD/IMG-2681.jpg",
+    "https://i.postimg.cc/ZnD9KgCh/png.jpg",
+    "https://i.postimg.cc/764D0NpJ/IMG-2640.jpg", // الصورة الأولى
+      "https://i.postimg.cc/kXm1CpWb/Instagram.jpg", // الصورة الأولى
 
-    "https://cdn.discordapp.com/attachments/1200935158409334905/1383447167082954873/IMG_2335.png?ex=686a8293&is=68693113&hm=fc04963a68f5d737a1c4f068da6e06d03e7d107647e4b6cc7d08381bc8219d8e&" // الصورة الثانية
+    "https://i.postimg.cc/kXPJmqjv/IMG-2335.jpg" // الصورة الثانية
   ];
   
   let currentIndex = 0;
@@ -1371,10 +1371,43 @@ select#deviceSelect::after {
 <!DOCTYPE html>
 <!--Start of Tawk.to Script-->
 <!-- Crisp Chat Script -->
-<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="62904070-1bb8-4cc2-9433-a079b5c17fa4";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+<!-- Crisp Chat Script -->
+<script type="text/javascript">
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "62904070-1bb8-4cc2-9433-a079b5c17fa4";
+  (function () {
+    d = document;
+    s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+</script>
+
+<!-- تخصيص لون وموقع زر الشات -->
+<style>
+  .crisp-client .cc-1x2z3p1 {
+    background-color: #4a148c !important; /* لون الزر */
+    bottom: 80px !important;               /* رفع الزر عن الحافة */
+  }
+</style>
 <!--End of Tawk.to Script-->
 <!--End of Tawk.to Script-->
 <!--End of Tawk.to Script-->
+<style>
+  <style>
+/* تخصيص زر شات كريسپ */
+#crisp-chatbox {
+  bottom: 90px !important; /* يرفع الزر شوي عن الزاوية */
+  right: 20px !important;   /* لو تبي تحركه يمين/يسار */
+}
+
+/* تغيير لون زر الفقاعة */
+#crisp-chatbox .cc-1r.qk.cc-qo {
+  background-color: #4b0082 !important; /* حط اللون اللي تبيه */
+}
+</style>
+</style>
 </body>
 </html>
 

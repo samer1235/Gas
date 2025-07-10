@@ -132,6 +132,12 @@
       background: #ddd;
       z-index: 1;
     }
+    #progressFill {
+      height: 100%;
+      width: 0%;
+      background-color: #25D366;
+      transition: width 0.8s ease-in-out;
+    }
     .step {
       width: 30px;
       height: 30px;
@@ -178,21 +184,23 @@
     كيف تستخدم الخدمة؟
   </p>
   <ol style="padding-right: 20px; color: #333;">
-    <li>أرسل طلبك من خلال النموذج في صفحة الطلب.</li>
+    <li>أرسل طلبك من خلال النموذج أعلاه.</li>
     <li>بعد الإرسال، سيظهر لك <strong>رقم تتبع الطلب</strong>.</li>
-    <li>ادخل اسمك، رقم جوالك، ورقم الطلب هنا لمعرفة حالة طلبك.</li>
+    <li>اضغط على رابط <strong>"استعلام"</strong> الموجود بجانب الرقم، لمعرفة حالة الطلب.</li>
   </ol>
   <p style="margin-top: 20px; text-align: center;">
     🚀 نسعى لتقديم أفضل تجربة طلابية في المملكة.
   </p>
 </section>
 
+<!-- زر إبدأ الخدمة -->
 <button class="start-btn" onclick="
   document.getElementById('trackingForm').style.display='block'; 
   this.style.display='none'; 
   document.querySelector('section').style.display='none';
 ">ابدأ الخدمة</button>
 
+<!-- النموذج -->
 <div id="trackingForm" style="display:none;">
   <form id="trackForm">
     <label for="trackName">الاسم:</label>
@@ -212,9 +220,12 @@
     <div id="successTitle" class="success-title" style="display:none;">✅ تم الاستعلام بنجاح</div>
     <div id="resultText" style="display:none; white-space: pre-line;"></div>
 
+    <!-- الخط الزمني -->
     <div id="progressTimeline" style="display:none;">
       <div class="progress-container">
-        <div class="progress-line"></div>
+        <div class="progress-line">
+          <div id="progressFill"></div>
+        </div>
         <div class="step" id="step1">📦</div>
         <div class="step" id="step2">📱</div>
         <div class="step" id="step3">🚀</div>
@@ -263,31 +274,17 @@
 
     const nameInput = document.getElementById('trackName').value.trim();
     const phoneInput = document.getElementById('trackPhone').value.trim();
-    const codeInput = document.getElementById('trackCode').value.trim().toUpperCase();
+    const codeInput = document.getElementById('trackCode').value.trim();
 
-    let foundData = null;
-
-    // ابحث في جميع مفاتيح localStorage التي تبدأ بـ orderData_
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key.startsWith('orderData_')) {
-        try {
-          const data = JSON.parse(localStorage.getItem(key));
-          if (data.name === nameInput && data.phone === phoneInput && data.code === codeInput) {
-            foundData = data;
-            break;
-          }
-        } catch {}
-      }
-    }
+    const storedData = JSON.parse(localStorage.getItem("orderData") || "{}");
 
     const dotInterval = startDotsAnimation();
 
     setTimeout(() => {
       stopDotsAnimation(dotInterval);
 
-      if (foundData) {
-        const elapsed = Date.now() - foundData.timestamp;
+      if (storedData.name === nameInput && storedData.phone === phoneInput && storedData.code === codeInput) {
+        const elapsed = Date.now() - storedData.timestamp;
         successTitle.style.display = 'block';
         resultText.style.display = 'block';
         progressTimeline.style.display = 'block';
@@ -301,11 +298,14 @@
         ];
 
         let latestStatus = steps[0].label;
-        steps.forEach(step => {
+        steps.forEach((step, index) => {
           const el = document.getElementById(step.id);
           if (elapsed >= step.time) {
             el.classList.add('active');
             latestStatus = step.label;
+
+            // تحريك الخط حسب التقدم
+            document.getElementById("progressFill").style.width = ((index + 1) / steps.length * 100) + "%";
           } else {
             el.classList.remove('active');
           }

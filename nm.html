@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -107,6 +109,10 @@
     <a href="nn.html">استعلام</a>
   </div>
 
+
+
+
+
   <div id="customConfirm">
     <div style="background:white;padding:20px;border-radius:15px;max-width:360px;margin:100px auto;text-align:center;">
       <p style="font-weight:bold;font-size:1.1em;color:#3B0A77;">
@@ -120,7 +126,7 @@
   </div>
 
   <script>
-    const COOLDOWN_MINUTES = 1440; // 24 ساعة
+    const COOLDOWN_MINUTES = 1440;
     const params = new URLSearchParams(window.location.search);
     const selectedDevice = params.get("device") || "iPhone 16 Pro Max";
     const cashPrice = parseInt(params.get("cash")) || 5199;
@@ -137,23 +143,23 @@
     document.getElementById('dob').max = new Date().toISOString().split('T')[0];
 
     let errorTimeout;
-    const showError = msg => {
-      clearTimeout(errorTimeout);
-      const errorEl = document.getElementById('errorMsg');
-      errorEl.textContent = msg;
-      errorEl.style.display = 'block';
-      ['responseMsg', 'successAnimation', 'spinner', 'linkTrack'].forEach(id => document.getElementById(id).style.display = 'none');
-      errorTimeout = setTimeout(() => {
-        errorEl.style.display = 'none';
-      }, 5000);
-    };
+const showError = msg => {
+  clearTimeout(errorTimeout); // يوقف مؤقت سابق إذا فيه
+  const errorEl = document.getElementById('errorMsg');
+  errorEl.textContent = msg;
+  errorEl.style.display = 'block';
+  ['responseMsg', 'successAnimation', 'spinner', 'linkTrack'].forEach(id => document.getElementById(id).style.display = 'none');
+  errorTimeout = setTimeout(() => {
+    errorEl.style.display = 'none';
+  }, 5000); // يخفي الرسالة بعد 10 ثواني
+};
     const showSuccess = (msg, code) => {
       document.getElementById('responseMsg').textContent = msg;
       document.getElementById('responseMsg').style.display = 'block';
       document.getElementById('displayCode').textContent = code;
       document.getElementById('linkTrack').style.display = 'block';
       ['errorMsg','successAnimation','spinner'].forEach(id => document.getElementById(id).style.display = 'none');
-    };
+    }
 
     const confirmPhoneLinked = (phone, idNumber) => {
       return new Promise(resolve => {
@@ -169,14 +175,10 @@
           resolve(false);
         };
       });
-    };
+    }
 
-    FingerprintJS.load()
-    .then(fp => fp.get())
-    .then(result => {
+    FingerprintJS.load().then(fp => fp.get()).then(result => {
       visitorId = result.visitorId;
-
-      // تحقق من طلب سابق
       const previous = JSON.parse(localStorage.getItem("orderData_" + visitorId));
       if (previous) {
         const diff = Date.now() - previous.timestamp;
@@ -213,15 +215,15 @@
       const m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
       if (age < 18) {
-        const spinner = document.getElementById('spinner');
-        spinner.style.display = 'block';
-        setTimeout(() => {
-          spinner.style.display = 'none';
-          showError("⚠️ يجب أن يكون عمرك 18 سنة أو أكثر.");
-        }, 7000);
-        return;
-      }
-
+  spinner.style.display = 'block'; // عرض الدوّران
+  setTimeout(() => {
+    spinner.style.display = 'none'; // إخفاء الدوّران
+    showError("⚠️ يجب أن يكون عمرك 18 سنة أو أكثر.");
+  }, 7000);
+  return;
+}
+      
+      
       const confirmed = await confirmPhoneLinked(phone, idNumber);
       if (!confirmed) return showError("🚫 الرقم غير مربوط برقم الهوية.");
 
@@ -244,9 +246,7 @@
           return showError("🚫 " + (err.message || "حدث خطأ أثناء الإرسال."));
         }
 
-        // تخزين بيانات الطلب مع visitorId
-        localStorage.setItem("orderData_" + visitorId, JSON.stringify({ name, phone, code, timestamp }));
-
+        localStorage.setItem("orderData", JSON.stringify({ name, phone, code, timestamp })); 
         document.getElementById("orderForm").style.display = 'none';
         document.getElementById("successAnimation").style.display = 'block';
 
@@ -261,7 +261,8 @@
       }
     });
   </script>
-   <style>
+<style>
+    <style>
     body {
       font-family: 'Almarai', sans-serif;
       background: #f9f9fb url('https://www.transparenttextures.com/patterns/symphony.png');
@@ -344,5 +345,9 @@
       z-index: 1000;
     }
   </style>
+</style>
 </body>
 </html>
+
+
+

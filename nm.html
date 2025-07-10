@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -17,6 +14,7 @@
       padding: 20px;
       max-width: 400px;
       margin: 40px auto;
+      direction: rtl;
     }
     h1 { color: #3b0a77; text-align: center; }
     form {
@@ -24,6 +22,7 @@
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 6px 20px rgba(140,58,255,0.15);
+      margin-bottom: 20px;
     }
     label { display: block; margin: 15px 0 5px; font-weight: 700; color: #3b0a77; }
     input[type="text"], input[type="tel"], input[type="date"] {
@@ -45,7 +44,7 @@
     #responseMsg { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     #errorMsg   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     #linkTrack  { background: #eef9f3; color: #128C7E; border: 1px solid #c3e6cb; }
-    #linkTrack a { color: #25D366; font-weight: bold; text-decoration: none; }
+    #linkTrack a { color: #25D366; font-weight: bold; text-decoration: none; margin-left: 10px; }
     .spinner {
       border: 5px solid #f3f3f3; border-top: 5px solid #25D366;
       border-radius: 50%; width: 50px; height: 50px;
@@ -80,10 +79,10 @@
     <input type="text" id="name" required placeholder="ادخل اسمك" />
 
     <label for="phone">رقم الجوال:</label>
-    <input type="tel" id="phone" required pattern="05[0-9]{8}" placeholder="05xxxxxxxx" />
+    <input type="tel" id="phone" required pattern="05[0-9]{8}" placeholder="05xxxxxxxx" inputmode="numeric" />
 
     <label for="idNumber">رقم الهوية:</label>
-    <input type="text" id="idNumber" required pattern="[0-9]{10}" placeholder="رقم الهويه او الاقامه " />
+    <input type="text" id="idNumber" required pattern="[0-9]{10}" placeholder="10 أرقام" inputmode="numeric" />
 
     <label for="dob">تاريخ الميلاد:</label>
     <input type="date" id="dob" required max="" />
@@ -91,7 +90,7 @@
     <label for="device">اسم الجهاز:</label>
     <input type="text" id="device" readonly />
 
-    <div id="deviceDetails" style="color:#3B0A77; margin-top:10px"></div>
+    <div id="deviceDetails" style="color:#3b0a77; margin-top:10px"></div>
     <button type="submit">أرسل الطلب</button>
   </form>
 
@@ -109,17 +108,13 @@
     <a href="vb.html">استعلام</a>
   </div>
 
-
-
-
-
   <div id="customConfirm">
     <div style="background:white;padding:20px;border-radius:15px;max-width:360px;margin:100px auto;text-align:center;">
       <p style="font-weight:bold;font-size:1.1em;color:#3B0A77;">
         ⚠️ هل الرقم المدخل <span id="confirmPhone"></span><br>مربوط برقم الهوية <span id="confirmID"></span>؟
       </p>
       <div style="margin-top:15px;">
-        <button id="confirmYes" style="background:#3B0A77;color:white;padding:10px 25px;border:none;border-radius:30px;">نعم</button>
+        <button id="confirmYes" style="background:#25D366;color:white;padding:10px 25px;border:none;border-radius:30px;">نعم</button>
         <button id="confirmNo" style="background:#ccc;color:#333;padding:10px 25px;border:none;border-radius:30px;">لا</button>
       </div>
     </div>
@@ -143,211 +138,96 @@
     document.getElementById('dob').max = new Date().toISOString().split('T')[0];
 
     let errorTimeout;
-const showError = msg => {
-  clearTimeout(errorTimeout); // يوقف مؤقت سابق إذا فيه
-  const errorEl = document.getElementById('errorMsg');
-  errorEl.textContent = msg;
-  errorEl.style.display = 'block';
-  ['responseMsg', 'successAnimation', 'spinner', 'linkTrack'].forEach(id => document.getElementById(id).style.display = 'none');
-  errorTimeout = setTimeout(() => {
-    errorEl.style.display = 'none';
-  }, 5000); // يخفي الرسالة بعد 10 ثواني
-};
+    const showError = msg => {
+      clearTimeout(errorTimeout);
+      const e = document.getElementById('errorMsg');
+      e.textContent = msg; e.style.display = 'block';
+      ['responseMsg','successAnimation','spinner','linkTrack']
+        .forEach(id=>document.getElementById(id).style.display='none');
+      errorTimeout = setTimeout(() => e.style.display='none', 5000);
+    };
     const showSuccess = (msg, code) => {
-      document.getElementById('responseMsg').textContent = msg;
-      document.getElementById('responseMsg').style.display = 'block';
+      const r = document.getElementById('responseMsg');
+      r.textContent = msg; r.style.display='block';
       document.getElementById('displayCode').textContent = code;
-      document.getElementById('linkTrack').style.display = 'block';
-      ['errorMsg','successAnimation','spinner'].forEach(id => document.getElementById(id).style.display = 'none');
-    }
+      document.getElementById('linkTrack').style.display='block';
+      ['errorMsg','successAnimation','spinner']
+        .forEach(id=>document.getElementById(id).style.display='none');
+    };
 
-    const confirmPhoneLinked = (phone, idNumber) => {
-      return new Promise(resolve => {
-        document.getElementById('confirmPhone').textContent = phone;
-        document.getElementById('confirmID').textContent = idNumber;
-        document.getElementById('customConfirm').style.display = 'block';
-        document.getElementById('confirmYes').onclick = () => {
-          document.getElementById('customConfirm').style.display = 'none';
-          resolve(true);
-        };
-        document.getElementById('confirmNo').onclick = () => {
-          document.getElementById('customConfirm').style.display = 'none';
-          resolve(false);
-        };
-      });
-    }
+    const confirmPhoneLinked = (phone,idNumber)=>new Promise(res=>{
+      document.getElementById('confirmPhone').textContent=phone;
+      document.getElementById('confirmID').textContent=idNumber;
+      document.getElementById('customConfirm').style.display='block';
+      document.getElementById('confirmYes').onclick=()=>{document.getElementById('customConfirm').style.display='none';res(true)};
+      document.getElementById('confirmNo').onclick=()=>{document.getElementById('customConfirm').style.display='none';res(false)};
+    });
 
-    FingerprintJS.load().then(fp => fp.get()).then(result => {
-      visitorId = result.visitorId;
-      const previous = JSON.parse(localStorage.getItem("orderData_" + visitorId));
-      if (previous) {
-        const diff = Date.now() - previous.timestamp;
-        if (diff < COOLDOWN_MINUTES * 60 * 1000) {
-          const minsLeft = Math.ceil((COOLDOWN_MINUTES * 60 * 1000 - diff) / 60000);
-          const h = Math.floor(minsLeft / 60), m = minsLeft % 60;
-          document.getElementById("orderForm").style.display = "none";
-          document.getElementById("responseMsg").textContent = `⚠️ لقد قمت بإرسال طلب مسبقًا. الرجاء الانتظار ${h} ساعة و${m} دقيقة.`;
-          document.getElementById("responseMsg").style.display = "block";
-          document.getElementById("displayCode").textContent = previous.code;
-          document.getElementById("linkTrack").style.display = "block";
-        } else {
-          localStorage.removeItem("orderData_" + visitorId);
-        }
+    FingerprintJS.load().then(fp=>fp.get()).then(r=>{
+      visitorId = r.visitorId;
+      const prev = JSON.parse(localStorage.getItem("orderData_"+visitorId)||'null');
+      if(prev){
+        const diff = Date.now()-prev.timestamp;
+        if(diff<COOLDOWN_MINUTES*60e3){
+          const mins = Math.ceil((COOLDOWN_MINUTES*60e3-diff)/60000);
+          const h = Math.floor(mins/60), m = mins%60;
+          document.getElementById("orderForm").style.display="none";
+          const rm = document.getElementById("responseMsg");
+          rm.textContent=`⚠️ لقد أرسلت طلب مسبقًا، الرجاء الانتظار ${h} ساعة و${m} دقيقة.`;
+          rm.style.display="block";
+          document.getElementById("displayCode").textContent=prev.code;
+          document.getElementById("linkTrack").style.display="block";
+        } else localStorage.removeItem("orderData_"+visitorId);
       }
     });
 
-    document.getElementById('orderForm').addEventListener('submit', async e => {
+    document.getElementById('orderForm').addEventListener('submit', async e=>{
       e.preventDefault();
-      if (!visitorId) return showError("⚠️ جاري التحميل، حاول بعد لحظة.");
-
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const idNumber = document.getElementById('idNumber').value.trim();
-      const dob = document.getElementById('dob').value;
-      const device = document.getElementById('device').value.trim();
-
-      if (!name || !phone.match(/^05[0-9]{8}$/) || !idNumber.match(/^[0-9]{10}$/) || !dob) {
-        return showError("⚠️ يرجى تعبئة كل الحقول بشكل صحيح.");
+      if(!visitorId) return showError("⚠️ جاري التحميل، حاول لاحقًا.");
+      const name    = document.getElementById('name').value.trim();
+      const phone   = document.getElementById('phone').value.trim();
+      const idNumber= document.getElementById('idNumber').value.trim();
+      const dob     = document.getElementById('dob').value;
+      const device  = document.getElementById('device').value;
+      if(!name||!phone.match(/^05\d{8}$/)||!idNumber.match(/^\d{10}$/)||!dob)
+        return showError("⚠️ أكمل كل الحقول بشكل صحيح.");
+      // تحقق العمر
+      const bd=new Date(dob), now=new Date();
+      let age=now.getFullYear()-bd.getFullYear();
+      if(now.getMonth()<bd.getMonth()|| (now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate())) age--;
+      if(age<18){
+        document.getElementById('spinner').style.display='block';
+        return setTimeout(()=>{
+          document.getElementById('spinner').style.display='none';
+          showError("⚠️ يجب أن يكون عمرك 18 سنة أو أكثر.");
+        },3000);
       }
-
-      const birthDate = new Date(dob), today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-      if (age < 18) {
-  spinner.style.display = 'block'; // عرض الدوّران
-  setTimeout(() => {
-    spinner.style.display = 'none'; // إخفاء الدوّران
-    showError("⚠️ يجب أن يكون عمرك 18 سنة أو أكثر.");
-  }, 7000);
-  return;
-}
-      
-      
-      const confirmed = await confirmPhoneLinked(phone, idNumber);
-      if (!confirmed) return showError("🚫 الرقم غير مربوط برقم الهوية.");
-
-      document.getElementById("spinner").style.display = 'block';
-
+      const ok = await confirmPhoneLinked(phone,idNumber);
+      if(!ok) return showError("🚫 الرقم غير مربوط بالهوية.");
+      document.getElementById('spinner').style.display='block';
       const code = Math.random().toString(36).substr(2,6).toUpperCase();
       const timestamp = Date.now();
-
       try {
-        const res = await fetch("https://hhs-production.up.railway.app/api/order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, phone, idNumber, dob, device, cashPrice, installmentPrice, monthly, code, visitorId })
+        const res = await fetch('/api/order', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ name, phone, idNumber, dob, device, cashPrice, installmentPrice, monthly, code })
         });
-
-        document.getElementById("spinner").style.display = 'none';
-
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          return showError("🚫 " + (err.message || "حدث خطأ أثناء الإرسال."));
-        }
-
-        localStorage.setItem("orderData", JSON.stringify({ name, phone, code, timestamp })); 
-        document.getElementById("orderForm").style.display = 'none';
-        document.getElementById("successAnimation").style.display = 'block';
-
-        setTimeout(() => {
-          document.getElementById("successAnimation").style.display = 'none';
+        document.getElementById('spinner').style.display='none';
+        const json = await res.json();
+        if(!res.ok) return showError("🚫 "+(json.error||"فشل الإرسال"));
+        localStorage.setItem("orderData_"+visitorId, JSON.stringify({ name, phone, code, timestamp }));
+        document.getElementById('orderForm').style.display='none';
+        document.getElementById('successAnimation').style.display='block';
+        setTimeout(()=>{
+          document.getElementById('successAnimation').style.display='none';
           showSuccess("✅ تم استلام الطلب، سيتم التواصل معك قريبًا.", code);
-        }, 2500);
-
+        },2500);
       } catch {
-        document.getElementById("spinner").style.display = 'none';
-        showError("🚫 فشل الإرسال. حاول لاحقاً.");
+        document.getElementById('spinner').style.display='none';
+        showError("🚫 فشل الاتصال بالخادم");
       }
     });
   </script>
-<style>
-    <style>
-    body {
-      font-family: 'Almarai', sans-serif;
-      background: #f9f9fb url('https://www.transparenttextures.com/patterns/symphony.png');
-      color: #222;
-      padding: 20px;
-      max-width: 400px;
-      margin: 40px auto;
-      direction: rtl;
-    }
-    h1 { color: #3b0a77; text-align: center; }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(140,58,255,0.15);
-      margin-bottom: 20px;
-    }
-    label { display: block; margin: 15px 0 5px; font-weight: 700; color: #3b0a77; }
-    input[type="text"], input[type="tel"], input[type="date"] {
-      width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #ddd;
-      font-size: 1em; box-sizing: border-box;
-    }
-    button {
-      margin-top: 25px; width: 100%; padding: 15px;
-      background: linear-gradient(90deg, #71548C, ##128C7E);
-      color: white; font-weight: 700; font-size: 1.2em;
-      border: none; border-radius: 50px; cursor: pointer;
-      transition: box-shadow 0.3s ease;
-    }
-    button:hover { box-shadow: 0 0 25px #3b0a77; }
-    #responseMsg, #errorMsg, #linkTrack {
-      margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; display: none;
-    }
-    #responseMsg { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    #errorMsg   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    #linkTrack  { background: #eef9f3; color: #128C7E; border: 1px solid #c3e6cb; }
-    #linkTrack a {
-      color: #25D366; font-weight: bold; text-decoration: none; margin-left: 10px;
-    }
-    .spinner {
-      border: 5px solid #f3f3f3; border-top: 5px solid #25D366;
-      border-radius: 50%; width: 50px; height: 50px;
-      animation: spin 1s linear infinite; margin: 30px auto; display: none;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #successAnimation { display: none; text-align: center; margin-top: 30px; }
-    .checkmark-circle {
-      margin: 0 auto; width: 100px; height: 100px; background: #3B0A77;
-      border-radius: 50%; display: flex; justify-content: center; align-items: center;
-      animation: pop 0.6s ease-out;
-    }
-    .checkmark { width: 25px; height: 12px; border-left: 4px solid #fff; border-bottom: 4px solid #fff; transform: rotate(-45deg); }
-    @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    .success-text {
-      margin-top: 15px; font-size: 1.3em; font-weight: bold; color: #3B0A77;
-      animation: fadeIn 1s ease-in;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    footer { text-align: center; margin-top: 40px; color: #888; font-size: 0.9em; }
-
-    input[type="date"] {
-      width: 60%;
-      height: 30px;
-      padding: 6px 10px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: 2px solid #ddd;
-      box-sizing: border-box;
-      color: #222;
-      background-color: white;
-      direction: ltr;
-    }
-
-    /* Modal confirmation style */
-    #customConfirm {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 1000;
-    }
-  </style>
-</style>
 </body>
 </html>
-
-
-

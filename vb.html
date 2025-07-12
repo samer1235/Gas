@@ -229,7 +229,7 @@
         <div class="step" id="step1">📦</div>
         <div class="step" id="step2">📱</div>
         <div class="step" id="step3">🚀</div>
-        <div class="step" id="step4">✅</div>
+        <div class="step" id="step4">📮</div>
       </div>
       <div id="statusLabel"></div>
     </div>
@@ -240,7 +240,10 @@
   جميع الحقوق محفوظة &copy; 4STORE - <span dir="ltr">2025</span>
 </footer>
 
+
+
 <script>
+
   const trackForm = document.getElementById('trackForm');
   const trackResult = document.getElementById('trackResult');
   const loadingContainer = document.getElementById('loadingContainer');
@@ -294,7 +297,7 @@
           { id: "step1", time: 0, label: "📦 الطلب قيد المعالجة" },
           { id: "step2", time: 2 * 3600000, label: "📱 تم فتح الطلب" },
           { id: "step3", time: 3 * 3600000, label: "🚀 الطلب قيد التنفيذ" },
-          { id: "step4", time: 4 * 3600000, label: "✅ تم إنهاء الطلب - تواصل مع الدعم الفني" }
+          { id: "step4", time: 4 * 3600000, label: " طلبك معلق 📮 - تواصل مع الدعم الفني" }
         ];
 
         let latestStatus = steps[0].label;
@@ -321,7 +324,15 @@
       }
     }, 2000);
   });
+  
+  
 </script>
+
+
+
+</body>
+</html>
+
 
 </body>
 </html>

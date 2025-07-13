@@ -1417,9 +1417,33 @@ select#deviceSelect::after {
   background-color: #4b0082 !important; /* حط اللون اللي تبيه */
 }
 </style>
+<style>
+  
+  
+  .fake-notification {
+position: fixed;
+top: 20px; /* مسافة 20px من الأعلى */
+right: 20px; /* مسافة 20px من اليمين */
+/* احذف bottom و left أو اجعلهما auto */
+bottom: auto;
+left: auto;
+/* بقية الخصائص كما هي */
+background-color: #e6f9ee;
+color: #1a472a;
+padding: 14px 18px;
+border-radius: 30px;
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+font-size: 14px;
+z-index: 9999;
+display: flex;
+align-items: center;
+gap: 10px;
+opacity: 0;
+transform: translateY(30px);
+transition: all 0.5s ease-in-out;
+}
 </style>
 
 
 </body>
 </html>
-
